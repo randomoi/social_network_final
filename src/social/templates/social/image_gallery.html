@@ -1,0 +1,78 @@
+{% extends "social/base.html" %}
+{% load static %}
+{% block content %}
+<!--START - code was developed with the help of documentation and other external research, please see referenced links. -->
+<!-- gallery section -->
+<div class="col-md-12">
+  <div class="content-section "> 
+    <!-- if user is viewing their Gallery show My Gallery, if user is visiting friend's page show their username Gallery -->
+    {% if request.user == user %}
+          <h2>My Gallery</h2>
+      {% else %}
+          <h2>{{ user.username }}'s Gallery</h2>
+    {% endif %}
+
+    <legend class="border-bottom mb-4"></legend>
+    <div class="row">
+      {% for item in image_gallery_items %}
+        <div class="col-md-4 mb-3">
+          <!-- show image as thumbnail -->
+          <a href="#" data-toggle="modal" data-target="#imageModal{{ item.id }}">
+            <img src="{{ item.file.url }}" alt="Gallery Item" class="img-thumbnail">
+          </a>
+
+          <!-- adds delete functionality for owner of imagegallery items -->
+          {% if belongs_to_user_gallery %}
+          <h5 class="card-title">{{ item.title }}</h5>
+            <form method="post" action="{% url 'delete-gallery-item' item.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this image?')">Delete</button>
+            </form>
+          {% endif %}
+        </div>
+
+        <!-- modal for showing full-size images -->
+        <div class="modal fade" id="imageModal{{ item.id }}" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">{{ item.file.name }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <!-- show full-size image in modal -->
+                <img src="{{ item.file.url }}" class="img-fluid" alt="{{ item.file.name }}">
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="row">
+      <div class="col-12 text-center mt-3">
+        {% if belongs_to_user_gallery %}
+        <!-- if owner of gallery, display "Return to Home" button -->
+        <a href="{% url 'social-home' %}" class="btn btn-primary">Return to Home</a>
+        {% else %}
+        <!-- if not owner, display "Return to User Profile" button -->
+        <a href="{% url 'user-profile' user.pk %}" class="btn btn-primary">Return to Friend Page</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+<!-- 
+References:
+https://csharp-video-tutorials.blogspot.com/2016/05/bootstrap-image-gallery.html
+https://getbootstrap.com/docs/4.0/layout/grid/
+https://azmind.com/bootstrap-fieldset-legend/
+https://www.w3schools.com/bootstrap4/bootstrap_utilities.asp
+https://www.codeply.com/go/IczuqP9l7K/order-bootstrap-4-divs-top-to-bottom
+
+END - code was developed with the help of documentation and other external research, please see referenced links.
+-->

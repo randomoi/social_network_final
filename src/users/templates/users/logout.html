@@ -1,0 +1,22 @@
+{% extends "social/base.html" %}  
+<!-- {# START - code was developed with the help of documentation and other external research, please see referenced links. 
+    #} -->
+{% block content %}  
+    <h2>Succesfully logged out</h2>  
+    <div class="border-top pt-3">  
+        <small class="text-muted">  
+            <a href="{% url 'login' %}">Log In Again</a>  
+        </small>
+    </div>
+
+{% endblock content %}  
+
+<!-- {# References:
+https://docs.djangoproject.com/en/3.2/topics/templates/#template-inheritance
+https://docs.djangoproject.com/en/3.2/ref/templates/builtins/#block
+https://docs.djangoproject.com/en/3.2/ref/templates/builtins/#url
+https://pylessons.com/django-login-logout
+    #}
+    
+    {# END - code was developed with the help of documentation and other external research, please see referenced links. 
+        #} -->

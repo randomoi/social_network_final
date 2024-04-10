@@ -1,0 +1,47 @@
+{% extends "social/base.html" %}  
+{% load crispy_forms_tags %}  
+
+{% block content %}
+<!-- {# START - code was developed with the help of documentation and other external research, please see referenced links. 
+    #} -->
+<div class="content-section ml-3">
+    <div class="media">
+        <img class="rounded-circle account-img" src="{{ user.profile.image.url }}"> 
+        <div class="media-body">
+            <h2 class="account-heading">{{ user.username }}</h2>  
+            <p class="text-secondary">{{ user.email }}</p> 
+        </div>
+    </div>
+    <!-- {# form for data  #} -->
+    <form method="POST" enctype="multipart/form-data">  
+        <!-- {# CSRF token for security #} -->
+        {% csrf_token %} 
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Profile Info</legend>
+            <!-- {# displays user form using crispy forms #} -->
+            {{ user_form|crispy }}  
+            <!-- {# displays profile form using crispy forms #} -->
+            {{ profile_form|crispy }}  
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-outline-info" type="submit">Update</button>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}
+
+<!-- {# References:
+https://docs.djangoproject.com/en/3.2/topics/templates/#template-inheritance
+https://django-crispy-forms.readthedocs.io/en/latest/
+https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#attr-enctype
+https://docs.djangoproject.com/en/3.2/ref/csrf/
+https://django-crispy-forms.readthedocs.io/en/latest/crispy_tag_forms.html
+https://getbootstrap.com/docs/4.0/layout/media-object/
+https://getbootstrap.com/docs/4.0/content/images/
+https://www.w3schools.com/bootstrap4/bootstrap_images.asp
+https://www.w3schools.com/bootstrap4/bootstrap_media_objects.asp
+https://stackoverflow.com/questions/63137279/bootstrap-4-rounded-circle-image-cant-get-it-to-be-responsive
+#}
+{# END - code was developed with the help of documentation and other external research, please see referenced links. 
+    #} -->

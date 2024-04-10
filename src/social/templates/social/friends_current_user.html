@@ -1,0 +1,95 @@
+{% extends "social/base.html" %} 
+{% load static %} 
+
+{% block content %} 
+<!-- START - code was developed with the help of documentation and other external research, please see referenced links. -->
+<div class="container mt-4">
+    <div class="row">
+        <!-- friend list column -->
+        <div class="col-sm-6 friend-list-col"> <!-- column to display list of friends-->
+            <div class="card">
+                <div class="card-body">
+                    <h2>My Friend List {{ friends_count }}</h2> <!-- shows friend count -->
+                    <p>Total friends: {{ friends.count }}</p> 
+                    <legend class="border-bottom mb-4"></legend>
+                    {% for friend in friends %} <!-- interate through friends to show each friend's info -->
+                        <div class="row align-items-center">
+                            <div class="col-sm-9">
+                                <h3>
+                                    <a href="{% url 'user-profile' friend.pk %}">
+                                        {{ friend.username }}
+                                    </a>
+                                </h3>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="d-flex justify-content-end">
+                                    <a href="{% url 'modify_friends' operation='remove' pk=friend.pk %}">
+                                        <button type="button" class="btn btn-default">Remove Friend</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <!-- search bar form column -->
+            <div class="search-bar-col"> 
+                <form method="POST" action="{% url 'profile-search' %}" class="d-flex">
+                    {% csrf_token %} <!-- CSRF token for security -->
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched_term"> <!-- search input field -->
+                    <button class="btn btn-secondary" type="submit" data-toggle="tooltip" data-placement="bottom" title="Search"> <!-- search button -->
+                        <img src="{% static 'social/images/search_icon.png' %}" alt="Logo" width="50" height="50" class="d-inline-block align-top"> <!-- search icon -->
+                    </button>
+                </form>
+            </div>
+
+            {% if searched_term %}
+                <div class="card search-result-card">
+                    <div class="card-body">
+                        <h1>Search result for {{ searched_term }}</h1> 
+                        {% for user in users %} <!-- iterate through search results to display each user's details -->
+                            <div class="row align-items-center">
+                                <div class="col-sm-9">
+                                    <h3>
+                                        <a href="{% url 'user-profile' user.pk %}">
+                                            {{ user.username }}
+                                        </a>
+                                    </h3>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="d-flex justify-content-end">
+                                        {% if user in friends %}
+                                        <span class="already-friend-message"> <!-- show "Already Friend" message if  already friends -->
+                                            <span class="already-friend-small-text">Already Friend</span>
+                                            <i class="fas fa-check-circle already-friend-icon"></i> <!-- checkmark to show user is already friend -->
+                                        </span>
+                                        {% else %}
+                                            <a href="{% url 'modify_friends' operation='add' pk=user.pk %}">
+                                                <button type="button" class="btn btn-success add-friend-button">Add Friend</button> 
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %} 
+
+<!-- 
+References: 
+https://getbootstrap.com/docs/4.1/components/card/
+https://stackoverflow.com/questions/59422422/how-to-implement-search-functionality-in-bootstrap-card-group-cards
+https://stackoverflow.com/questions/66514571/bootstrap-card-header-div-class-card-header-card-header-warning
+https://stackoverflow.com/questions/58594702/how-to-create-3-columns-for-cards-using-bootstrap-row-class
+https://www.w3schools.com/bootstrap4/bootstrap_cards.asp
+
+END - code was developed with the help of documentation and other external research, please see referenced links.
+-->

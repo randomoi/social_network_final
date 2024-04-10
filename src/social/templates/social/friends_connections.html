@@ -1,0 +1,55 @@
+{% extends "social/base.html" %}  
+{% load static %}  
+{% block content %}  
+
+<!-- START - code was developed with the help of documentation and other external research, please see referenced links. -->
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- friend list column -->
+        <div class="col-sm-6 friend-list-col">
+            <div class="card">
+                <div class="card-body">
+                    <h2>{{ user.username }}'s Friends</h2> 
+                    <p>Total friends: {{ friends.count }}</p>  <!-- show friend count -->
+                    <legend class="border-bottom mb-4"></legend>
+                    <div class="row"> 
+                        {% for friend in friends %}  <!-- loop over friends using  -->
+                            <div class="col-md-6 mb-4">
+                                <div class="card custom-card">
+                                    {% if user.is_authenticated %}
+                                    <a href="{% url 'user-profile' friend.pk %}"> 
+                                        <img src="{{ friend.profile.image.url }}" alt="{{ friend.username }}" class="card-img-top friends-connection-image"> <!-- show friend's image -->
+                                    </a>
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <a href="{% url 'user-profile' friend.pk %}">
+                                            <h5 class="card-title friend-name">{{ friend.username }}</h5>  
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mt-4">
+    <!-- if not the owner, display "Back to User Profile" button -->
+    <a href="{% url 'user-profile' user.pk %}" class="btn btn-primary">Back to User Profile</a>  
+</div>
+{% endblock content %} 
+
+<!-- 
+    References:
+    https://docs.djangoproject.com/en/stable/ref/templates/builtins/#count 
+    https://docs.djangoproject.com/en/stable/ref/templates/builtins/#for
+    https://docs.djangoproject.com/en/stable/ref/templates/builtins/#url
+    https://getbootstrap.com/docs/4.0/components/card/
+    https://stackoverflow.com/questions/58594702/how-to-create-3-columns-for-cards-using-bootstrap-row-class
+    https://www.w3schools.com/bootstrap4/bootstrap_cards.asp
+    
+    END - code was developed with the help of documentation and other external research, please see referenced links.
+-->

@@ -1,0 +1,145 @@
+{% extends "social/base.html" %}
+{% load static %}
+{% load count_tags %}
+{% block content %}
+<!--START - code was developed with the help of documentation, please see referenced links. --> 
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <div class="hero-body">
+                <!-- header -->
+                <h1>
+                    Chat With Friends or Find Another User
+                </h1>
+                <!-- horizontal line -->
+                <legend class="border-bottom mb-4"></legend>
+            </div>
+            <div class="row">
+                <!-- column for Friend List -->
+                <div class="col-sm-6 friend-list-col">
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- shows list of friends -->
+                            <h2>List of My Friends {{ friends_count }}</h2>
+                             <!-- horizontal line -->
+                            <legend class="border-bottom mb-4"></legend>
+                            {% if searched_term %}
+                                <!-- if user typed something, show result -->
+                                {% for friend in user_friends %}
+                                    <!-- show friends details -->
+                                    <div class="row align-items-center">
+                                        <div class="col-sm-9">
+                                            <div>
+                                                <h3>
+                                                    <!-- friend's profile link -->
+                                                    <a href="{% url 'user-profile' friend.pk %}">
+                                                        {{ friend.username }}
+                                                    </a>
+                                                </h3>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="d-flex justify-content-end">
+                                                <!-- POST form to start a chat -->
+                                                <form method="post" action="{% url 'chat_with_users' friend.pk %}">
+                                                    {% csrf_token %}
+                                                    <!-- chat buttong to initiate chat -->
+                                                    <button type="submit" class="btn btn-success add-friend-button">Start Chatting</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <!-- show friends list if nothing is being searched_term -->
+                                {% for friend in friends %}
+                                    <!-- show friend's details -->
+                                    <div class="row align-items-center">
+                                        <div class="col-sm-9">
+                                            <div>
+                                                <h3>
+                                                     <!-- friend's profile link -->
+                                                    <a href="{% url 'user-profile' friend.pk %}">
+                                                        {{ friend.username }}
+                                                    </a>
+                                                </h3>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="d-flex justify-content-end">
+                                                 <!-- POST form to start a chat -->
+                                                <form method="post" action="{% url 'chat_with_users' friend.pk %}">
+                                                    {% csrf_token %}
+                                                     <!-- chat buttong to initiate chat -->
+                                                    <button type="submit" class="btn btn-success add-friend-button">Start Chatting</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- column for Search -->
+                <div class="col-sm-6 search-bar-col">
+                    <form method="POST" action="{% url 'chat-search' %}" class="d-flex">
+                        {% csrf_token %}
+                        <!-- field for searching -->
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched_term">
+                        <!-- search button  -->
+                        <button class="btn btn-secondary" type="submit" data-toggle="tooltip" data-placement="bottom" title="Search">
+                            <img src="{% static 'social/images/search_icon.png' %}" alt="Logo" width="50" height="50" class="d-inline-block align-top">
+                        </button>
+                    </form>
+
+                    <!-- show search results -->
+                    {% if searched_term %}
+                        <div class="card search-result-card">
+                            <div class="card-body">
+                                <!-- header -->
+                                <h1>Retrieved results for {{ searched_term }}</h1>
+                                <!-- show list of user found with search term -->
+                                {% for friend in friends %}
+                                    <h3>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                               <!-- friend's profile link -->
+                                                <a href="{% url 'user-profile' friend.pk %}">
+                                                    {{ friend.username }}
+                                                </a>
+                                            </div>
+                                            <div class="col-md-6">
+                                               <!-- POST form to start a chat -->
+                                                <form method="post" action="{% url 'chat_with_users' friend.pk %}">
+                                                    {% csrf_token %}
+                                                   <!-- chat buttong to initiate chat -->
+                                                    <button type="submit" class="btn btn-success add-friend-button">Start Chatting</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </h3>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %} 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<!-- 
+References:
+https://www.c-sharpcorner.com/blogs/bootstrap-4-card-classes
+https://sudhakarinfotech.com/
+https://welcm.uk/blog/bootstrap-4-cards
+https://djangochannelsrestframework.readthedocs.io/en/latest/tutorial/part_1.html
+https://djangochannelsrestframework.readthedocs.io/en/latest/tutorial/part_2.html
+https://getbootstrap.com/docs/5.3/getting-started/introduction/
+https://docs.djangoproject.com/en/4.2/topics/templates/
+
+END - code was developed with the help of documentation, please see referenced links.
+ -->

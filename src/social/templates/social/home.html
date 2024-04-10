@@ -1,0 +1,279 @@
+<!-- Operating System: Project was developed on MacOS Ventura 13.4.1 (c)
+Source-code Editor: Visual Studio Code
+Browser Testing: Project was tested in Chrome Browser and Safari
+
+- Python version: Python 3.10.9
+- Django 4.2.1
+
+Database: SQLite3 -->
+
+{% extends "social/base.html" %} 
+
+{% load social_custom_tags %} 
+{% load count_tags %} 
+{% load crispy_forms_tags %} 
+
+{% load static %} 
+
+{% block content %} 
+<!-- START - code was developed with the help of documentation and other external research, please see referenced links. -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- user profile and friends section -->
+            <div class="content-section">
+                <div class="media">
+                    <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+                </div>
+                <div class="media-body">
+                    <p class="account-heading">
+                        {% if user == request.user %} 
+                            {{ user.username }}
+                        {% else %}
+                            {{ user.username }}
+                        {% endif %}
+                    </p>
+                    <legend class="border-bottom mb-4"></legend>
+                    <p class="text-secondary">Friends: {% friend_count user %}</p> <!-- show friend count -->
+                    <p class="text-secondary">Posts: {% post_count user %}</p> <!-- show post posts -->
+                    <p class="text-secondary">{{ user.email }}</p> <!-- show user's email -->
+
+                </div>
+            </div>
+            
+            <div class="content-section">
+                <h3>My Friends</h3>
+                <p class="mb-3">Total friends: {{ friends.count }}</p> <!-- show friend count -->
+                <legend class="border-bottom mb-4"></legend>
+                <div class="row">
+                    {% for friend in first_4_friends %} <!-- iterate over 1st four friends -->
+                        <div class="col-sm-6">
+                            <a href="{% url 'user-profile' friend.pk %}">
+                                <img src="{{ friend.profile.image.url }}" alt="{{ friend.username }}" class="friend-image"> <!-- show friend's profile image as thumbnail -->
+                            </a>
+                            <a href="{% url 'user-profile' friend.pk %}">
+                                <p class="friend-name">{{ friend.username }}</p> <!-- show friend's username -->
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="mt-3">
+                    <a href="{% url 'list_users' %}">View My Friends</a> 
+                </div>
+            </div> 
+        </div>
+
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="content-section gallery-card"> 
+                        <legend class="border-bottom mb-4">What would you like to do?</legend>
+                        <div class="button-container mt-4">
+                            <!-- add image to gallery link -->
+                            <a href="{% url 'upload-gallery' %}" class="btn btn-outline-info btn-block mb-3">Add Image to Gallery</a>
+
+                            <!-- create new post link -->
+                            <a href="{% url 'post-create' %}" class="btn btn-outline-info btn-block mb-3">Create Status Update</a>
+
+                            <!-- chat with friends link-->
+                            <a href="{% url 'chat-home' %}" class="btn btn-outline-info btn-block">Chat with a Friend</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- my gallery section -->
+                <div class="col-md-6">
+                    <div class="content-section gallery-card"> 
+                        <legend class="border-bottom mb-4">My Gallery</legend>
+                        <div class="row">
+                            {% for item in image_gallery_items|slice:":4" %} <!-- show 4 images -->
+                                <div class="col-md-6 mb-3">
+                                    <a href="#" data-toggle="modal" data-target="#imageModal{{ item.id }}"> <!-- show image as a thumbnail  -->
+                                        <img src="{{ item.file.url }}" alt="Gallery Item" class="img-thumbnail">
+                                    </a>
+                                </div>
+                                <!-- modal for showingfull-size image -->
+                                <div class="modal fade" id="imageModal{{ item.id }}" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="imageModalLabel">{{ item.file.name }}</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <img src="{{ item.file.url }}" class="img-fluid" alt="{{ item.file.name }}"> <!-- show full-size image in modal -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="text-center">
+                            <a href="{% url 'user-gallery' user.pk %}" class="btn btn-primary btn-sm">See All Images</a> <!-- link to view all images -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% for post in posts %}
+            <!-- iterate over each post and display it -->
+            <article class="media content-section">
+                <div class="media-body container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="article-metadata">
+                                <a class="mr-2">{{ post.author }}</a> <!-- show author's username for post -->
+                                <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small> <!-- show post date -->
+                            </div>
+                            {% if post.file %}
+                                {% if post.file|have_file_extension:".jpg" %}
+                                    <img src="{{ post.file.url }}" class="img-fluid" alt="Image"> <!-- show image  -->
+                                {% elif post.file|have_file_extension:".mp4" %}
+                                    <div class="embed-responsive embed-responsive-16by9">
+                                        <video class="embed-responsive-item" controls="controls">
+                                            <source src="{{ post.file.url }}" type="video/mp4"> <!-- show video -->
+                                        </video>
+                                    </div>
+                                {% else %}
+                                    <p>Unsupported file format.</p>
+                                {% endif %}
+                            {% else %}
+                                <p>No media available.</p>
+                            {% endif %}
+
+                            <div class="mr-2 article-content">
+                                <p>{{ post.content }}</p> <!-- show post text -->
+                            </div>
+
+                            {% if user.is_authenticated and user == post.author %}
+                                <div class="text-right mt-3">
+                                    <a href="{% url 'post-delete' post.id %}" class="btn btn-danger">Delete</a> <!-- if owner display "Delete my Post"  -->
+                                </div>
+                            {% endif %}
+
+                            <div class="favorite-section d-flex align-items-center pb-3">
+                                <a href="{% url 'like-post' post.id %}" class="favorite-link">
+                                    {% if user.is_authenticated %}
+                                        {% if user in post.thumbs_up.all %}
+                                            <i class="fas fa-thumbs-up like-icon" style="color: #11a037;"></i> <!--  green "thumbs-up" icon for auth user and they liked the post -->
+                                        {% else %}
+                                            <i class="far fa-thumbs-up like-icon" style="color: #b2aeaf;"></i> <!-- grey "thumbs-up" icon for auth user and they did not liked the post -->
+                                        {% endif %}
+                                    {% else %}
+                                        <i class="far fa-thumbs-up like-icon" style="color: #b2aeaf;"></i> <!-- grey "thumbs-up" icon if user is not authenticated -->
+                                    {% endif %}
+                                </a>
+                                <p class="favorite-count mb-0">
+                                    {% if post.thumbs_up.count > 0 %}
+                                        {% if user in post.thumbs_up.all %}
+                                            {{ post.thumbs_up.count }} gave thumbs up  <!-- count of users who gave thumbs up to this post -->
+                                            {% if user == post.author or user in post.thumbs_up.all %}
+                                                <span class="favorite-message"> (You gave thumbs up)</span> <!-- if user is post owner or has already gave thumbes up the post, show message -->
+                                            {% endif %}
+                                        {% else %}
+                                            {{ post.thumbs_up.count }} users
+                                        {% endif %}
+                                    {% else %}
+                                        0 users
+                                    {% endif %}
+                                </p>
+                            </div>
+
+                            <!-- show message if user is authenticated and did not give thumbs up  -->
+                            {% if user.is_authenticated and user not in post.thumbs_up.all %}
+                                <div class="favorite-message">
+                                    <p>give thumbs up to this post</p>
+                                </div>
+                            {% endif %}
+
+                            <form method="POST" action="{% url 'post-comment' %}">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <input type="hidden" name="id_post" value="{{ post.id }}">
+                                    <input type="text" class="form-control" placeholder="Enter your comment" name="comment">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+
+                            {% for comment in post.comments.all %}
+                                <div class="submitted-text d-flex justify-content-between">
+                                    <div>
+                                        <p>
+                                            <span class="comment-author">{{ comment.author.username }}</span> <!-- show username for comment  -->
+                                            <span class="comment-datetime">({{ comment.date_posted|date:"F d, Y H:i" }})</span><br> <!-- show comment date -->
+                                            <span class="comment-content">{{ comment.content }}</span> <!-- show comment text -->
+                                        </p>
+                                    </div>
+
+                                    <div>
+                                        <span class="comment-actions">
+                                            {% if user.is_authenticated and user == comment.author %}
+                                                <a href="{% url 'delete-comment' comment.id %}" class="delete-comment">Delete</a> <!-- display "Delete button" if the user is auth and is owner of comment -->
+                                            {% endif %}
+
+                                            <a href="{% url 'like-comment' comment.id %}" class="like-link">
+                                                {% if user.is_authenticated %}
+                                                    {% if user in comment.likes.all %}
+                                                        <i class="fas fa-heart like-icon" style="color: #f60929;"></i> <!-- display red "heart" icon if user is auth and liked comment -->
+                                                    {% else %}
+                                                        <i class="far fa-heart like-icon" style="color: #b2aeaf;"></i> <!-- display grey "heart" icon if  user is auth, but did not lik comment -->
+                                                    {% endif %}
+                                                {% else %}
+                                                    <i class="far fa-heart like-icon" style="color: #b2aeaf;"></i> <!-- display grey "heart" icon if user is not auth -->
+                                                {% endif %}
+                                            </a>
+                                            <span class="like-count">{{ comment.likes.count }}</span> <!-- display likes count  -->
+                                        </span>
+                                    </div>
+                                </div>
+                            {% empty %}
+                                <p>No comments available.</p>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% empty %}
+                <p>No posts available.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %} 
+
+<!-- 
+References:
+https://docs.djangoproject.com/en/4.2/topics/auth/default/
+https://www.w3schools.com/bootstrap4/bootstrap_media_objects.asp
+https://stackoverflow.com/questions/47559916/bootstrap-4-row-extends-outside-of-container
+https://bootstrap.themes.guide/how-to-use-bootstrap-grid.html
+https://www.geeksforgeeks.org/media-objects-in-bootstrap-with-examples/
+https://medium.com/@abdullafajal/whatsapp-login-in-django-application-using-opt-less-6aa9ed68941c
+https://medium.com/@abdullafajal/django-allauth-how-to-create-social-login-like-facebook-google-github-and-twitter-in-django-4c7e5cbb2ac
+https://realpython.com/django-user-management/
+https://learn.microsoft.com/en-us/visualstudio/python/learn-django-in-visual-studio-step-05-django-authentication?view=vs-2022
+https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Authentication
+https://stackoverflow.com/questions/68531669/if-user-is-authenticated-for-specific-user-only
+https://django.readthedocs.io/en/1.5.x/topics/forms/index.html
+https://forum.djangoproject.com/t/view-help-with-a-form-post-method-and-passing-an-id/7957
+https://forum.yiiframework.com/t/hidden-inputs-in-activeform/70314
+https://craftcms.stackexchange.com/questions/22139/enabling-csrf-protection-for-mailchimp-subscribe-plugin-and-other-forms
+https://stackoverflow.com/questions/42154036/bootstrap-make-the-images-inside-the-column-with-the-same-height
+https://github.com/PacktPublishing/Mastering-Bootstrap-4-Video/blob/master/lesson3-4.html
+https://symfony.com/doc/current/security/csrf.html
+https://laravel.com/docs/10.x/csrf
+https://docs.spring.io/spring-security/reference/5.7-SNAPSHOT/servlet/exploits/csrf.html
+https://www.stackhawk.com/blog/django-csrf-protection-guide/
+https://stackoverflow.com/questions/16106127/symfony-2-delete-forms-and-csrf-token
+https://stackoverflow.com/questions/27799985/spring-security-csrf-with-enctype-multipart-form-data
+https://getbootstrap.com/docs/4.0/layout/grid/
+https://getbootstrap.com/docs/3.4/css/
+https://stackoverflow.com/questions/18304619/how-do-i-space-these-images-inside-of-a-bootstrap-3-grid-system
+https://mdbootstrap.com/how-to/bootstrap/circle-image/
+https://www.tutorialrepublic.com/twitter-bootstrap-tutorial/bootstrap-media-objects.php
+
+END - code was developed with the help of documentation and other external research, please see referenced links. 
+-->

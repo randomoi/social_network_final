@@ -1,0 +1,24 @@
+{% extends "social/base.html" %} 
+
+{% block content %}
+<!-- START - code was developed with the help of documentation and other external research, please see referenced links. -->
+    <div class="container">
+        <h2>Delete Post/Status Update</h2> 
+        <p>Are you sure you want to delete this post/status update?</p> <!-- confirmation before deletion -->
+        <form method="post"> <!--  post deletion form -->
+            {% csrf_token %} <!-- CSRF token for security -->
+
+            <input type="submit" value="Delete" class="btn btn-danger"> <!-- submit button -->
+            <a href="{% url 'social-home' %}" class="btn btn-secondary">Cancel</a> <!-- cancel button  -->
+        </form>
+    </div>
+{% endblock %}
+
+<!-- 
+References: 
+https://stackoverflow.com/questions/16106127/symfony-2-delete-forms-and-csrf-token
+https://geonetwork-opensource.org/manuals/4.0.x/fr/customizing-application/misc.html
+https://levelup.gitconnected.com/build-a-project-management-system-in-django-part-2-d9d0059b08d3
+
+END - code was developed with the help of documentation and other external research, please see referenced links.
+-->

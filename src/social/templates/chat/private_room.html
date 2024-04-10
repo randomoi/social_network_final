@@ -1,0 +1,155 @@
+<!--START - code was developed with the help of documentation and enhanced with adding image to the text message, please see referenced links. --> 
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="shortcut icon" href="#">
+        <meta charset="utf-8"/>
+        <title>Private Chat Room</title>
+        <!-- Overriding Chat CSS -->
+        <link rel="stylesheet" type="text/css" href="{% static 'social/css/chat.css' %}">
+        <!-- Bulma CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+        <!-- FontAwesome CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+    <body>
+        <!-- main container -->
+        <section class="section is-small">
+            <div class="container is-fluid">
+                <div class="columns is-multiline">
+                    <!-- section for displaying who user is chatting with -->
+                        <div class="column is-half is-offset-one-quarter mb-1">
+                        <section class="hero is-small is-info">
+                            <div class="hero-body">
+                                <p class="title is-4">
+                                    Chatting with {{ receiver_username }}
+                                </p>
+                            </div>
+                        </section>
+                    </div>
+                     <!-- chat container -->
+                        <div class="column is-half is-offset-one-quarter">
+                        <div class="box">
+                            <!-- for some reason this section did not want to use custom styles, I had to do inline styling, sorry -->
+                            <div class="chat-container" id="chat-messages" style="max-height: 400px; overflow-y: auto;">
+                                <!-- checks for type of message (text or image) sent by current user or a friend -->
+                                {% for item in image_messages %}
+                                    {% if item.message.user.username == request.user.username %}
+                                        <div class="chat-msg-box chat-sender-message">
+                                            <b>Me</b> ({{ item.message.timestamp }}):
+                                            {% if item.is_file_image %}
+                                                <img src="{{ item.image_url }}" alt="User Image" class="chat-sender-image">
+                                            {% else %}
+                                                {{ item.message.content }}
+                                            {% endif %}
+                                        </div>
+                                    {% else %}
+                                        <div class="chat-msg-box chat-friend-message">
+                                            <b>{{ item.message.user.username }}</b> ({{ item.message.timestamp }}):
+                                            {% if item.is_file_image %}
+                                                <img src="{{ item.image_url }}" alt="User Image" class="chat-friend-image">
+                                            {% else %}
+                                                {{ item.message.content }}
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        <!-- section for text or image input fields -->
+                        <div class="field has-addons">
+                            <div class="control is-expanded">
+                                <input class="input" type="text" placeholder="Message" id="chat-text-input">
+                            </div>
+                            <div class="control">
+                                <label class="file-label">
+                                    <!-- allows to select only image format, extra validation -->
+                                    <input class="file-input" type="file" accept="image/*" id="chat-image-input">
+                                    <span class="file-cta">
+                                        <span class="file-icon">
+                                            <i class="fas fa-image"></i>
+                                        </span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                        <!-- section for SEND button -->
+                        <div class="field">
+                            <div class="control">
+                                <!-- calling transmitMessage() to send a message -->
+                                <a class="button is-success" id="submit-chat-message" onclick="transmitMessage()">Send</a>
+                            </div>
+                        </div>
+                        <!-- indicating current user's name -->
+                        <small class="has-text-grey-light">Your name: {{ username }}</small>
+                </div>
+            </div>
+                  <!-- button to return user to home page -->
+            <div class="column is-12 has-text-centered">
+                <a href="{% url 'social-home' %}" class="button is-link">Return to Home</a>
+            </div>
+        </section>
+
+        <!-- JSON data to communicate with JS -->
+        {{ private_chat_room_name|json_script:"json-chat-room-name" }}
+        {{ username|json_script:"json-username" }}
+        {{ receiver_username|json_script:"json-receiver-username" }}  
+
+<script>
+    // get JSON data for privateChatRoom.js
+    const privatChatRoomName = JSON.parse(document.getElementById('json-chat-room-name').textContent);
+    const username = '{{ username }}'; 
+    const friendUsername = JSON.parse(document.getElementById("json-receiver-username").textContent);
+</script>
+
+<script src="{% static 'social/js/privateChatRoom.js' %}"></script>
+
+<script>
+    // script to allow use of one button to send images or text
+    const chatImageInput = document.getElementById('chat-image-input');
+    const chatTextInput = document.getElementById('chat-text-input');
+
+    chatImageInput.addEventListener('change', () => {
+        if (chatImageInput.files.length > 0) {
+            const imageName = chatImageInput.files[0].name;
+            chatTextInput.placeholder = `Selected file name: ${imageName}`;
+        } else {
+            chatTextInput.placeholder = 'Type Message';
+        }
+    });
+
+    // resents input fiel after message was send (Event Listener) 
+    document.getElementById('submit-chat-message').addEventListener('click', () => {
+        chatTextInput.value = ''; // delete text input
+        chatTextInput.placeholder = 'Type Message'; // update placeholder
+    });
+</script>
+    </body>
+</html>
+{% endblock %}
+
+<!-- 
+// References:
+// https://djangochannelsrestframework.readthedocs.io/en/latest/tutorial/part_1.html
+// https://djangochannelsrestframework.readthedocs.io/en/latest/tutorial/part_2.html
+// https://bulma.io/documentation/
+// https://docs.djangoproject.com/en/4.2/topics/templates/
+// https://developer.mozilla.org/en-US/docs/Web/API/WebSocket
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
+// https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector
+// https://developer.mozilla.org/en-US/docs/Web/API/FileList
+// https://developer.mozilla.org/en-US/docs/Web/API/FileReader
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
+// https://www.w3schools.com/jsref/jsref_obj_date.asp
+// https://stackoverflow.com/questions/76798762/django-websocket-website-returning-an-empty-json-dictionary-when-i-try-to-refere
+// https://codewithstein.com/django-chat-using-channels-real-time-chat-tutorial-with-authentication/ 
+// https://pylessons.com/django-messaging
+// https://pythonprogramming.net/messages-django-tutorial/
+// https://stackoverflow.com/questions/74817740/django-on-visiting-page-i-get-an-alert-with-dictionary-values-in-it-what-is-ca
+
+// END - code was developed with the help of documentation and enhanced with adding image to the text message, please see referenced links. -->

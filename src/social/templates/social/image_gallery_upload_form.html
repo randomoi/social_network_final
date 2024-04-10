@@ -1,0 +1,57 @@
+{% extends "social/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %} 
+<!-- START - code was developed with the help of documentation and other external research, please see referenced links. -->
+<div class="col-md-9"> 
+    <div class="row"> 
+
+      <!-- add to my gallery section -->
+      <div class="col-md-6">
+        <div class="content-section gallery-card"> 
+
+          <form method="post" enctype="multipart/form-data"> <!-- post form to handle file upload -->
+            {% csrf_token %} <!-- CSRF token for security -->
+
+            <fieldset class="form-group"> <!-- groups form fields -->
+              <legend class="border-bottom mb-4">Add Image to My Gallery</legend> 
+
+              {{ form.title|as_crispy_field }} <!--show 'title' field with crispy forms tags -->
+
+              {{ form.file|as_crispy_field }} <!-- show 'file' field with crispy forms tags -->
+
+              {% if form.non_field_errors %} <!-- validate non-field errors  -->
+                <div class="alert alert-danger">
+                  {{ form.non_field_errors }} <!-- show non-field errors -->
+                </div>
+              {% endif %}
+
+              {% if form.file.errors %} <!-- check for errors -->
+                <div class="alert alert-danger">
+                  {{ form.file.errors }} <!-- show errors  -->
+                </div>
+              {% endif %}
+            </fieldset>
+
+            <div class="form-group"> <!-- create a form group to style button -->
+              <button class="btn btn-outline-info" type="submit">Upload Image</button> 
+            </div>
+          </form>
+         
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock content %} 
+
+<!-- 
+References:
+https://csharp-video-tutorials.blogspot.com/2016/05/bootstrap-image-gallery.html
+https://getbootstrap.com/docs/4.0/layout/grid/
+https://stackoverflow.com/questions/45914911/i-am-not-able-to-fill-a-select-inside-a-form 
+
+END - code was developed with the help of documentation and other external research, please see referenced links.
+-->
+

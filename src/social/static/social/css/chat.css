@@ -1,0 +1,78 @@
+/* general styles */
+* {
+    margin: 0;
+    padding: 0;
+  }
+  
+.chat-msg-box > div {
+    display: block;
+  }
+  
+  .chat-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* margins and padding for messages */
+  .chat-msg-box,
+  .chat-sender-image,
+  .chat-friend-image {
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  /* width of the message box */
+  .chat-msg-box {
+    max-width: 50%;
+  }
+  
+  /* text color and aligment */
+  .chat-sender-message,
+  .chat-friend-message {
+    text-align: left;
+    color: rgb(255, 255, 255);  /* white color */
+  }
+  
+  /* background color and alightment of senders text message */
+  .chat-sender-message {
+    background-color: #ef2b7c;  /* pink color */
+    align-self: flex-end;
+  }
+
+  /* background color of friend's text message */
+  .chat-friend-message {
+    background-color: #54585c;  /* dark grey color */
+  }
+
+  /* styles for image messages */
+  .chat-sender-image,
+  .chat-friend-image {
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  /* background color and alightment of senders image message */
+  .chat-sender-image {
+    background-color:  #ef2b7c;  /* pink color */
+    align-self: flex-end;
+    color: rgb(255, 255, 255);  /* white color */
+  }
+
+  /* background color of friend's image message */
+  .chat-friend-image {
+    background-color: #54585c; /* dark grey color */
+    align-self: flex-start;
+    color: rgb(255, 255, 255);  /* white color */
+  }
+
+  /* size of image and display */
+  .chat-sender-image img,
+  .chat-friend-image img {
+    max-width: 350px;
+    max-height: 350px;
+    display: block;
+  }
+  

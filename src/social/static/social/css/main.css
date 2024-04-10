@@ -1,0 +1,164 @@
+/* Base Styles */
+body {
+    background: #fafafa;
+    color: #1d1d1d;
+    margin-top: 8rem;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    color: #1d1c1c;
+  }
+  ul {
+    margin: 0;
+  }
+  
+  /* Backgrounds */
+  .bg-steel {
+    background-color: #bc9abc;
+  }
+  
+  /* Navbar Styles */
+  .site-header .navbar-nav .nav-link {
+    color: #c3cace;
+  }
+  .site-header .navbar-nav .nav-link:hover {
+    color: #ffffff;
+  }
+  .site-header .navbar-nav .nav-link.active {
+    font-weight: 500;
+  }
+  .my-navbar {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+  /* Content and Articles */
+  .content-section {
+    background: #ffffff;
+    padding: 10px 20px;
+    border: 1px solid #cecdcd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+  }
+  .article-title {
+    color: #2b2a2a;
+  }
+  a.article-title:hover {
+    color: #3c7fb9;
+    text-decoration: none;
+  }
+  .article-content {
+    white-space: pre-line;
+  }
+  .article-img {
+    height: 65px;
+    width: 65px;
+    margin-right: 16px;
+  }
+  .article-metadata {
+    padding-bottom: 1px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #f1f0f0;
+  }
+  .article-metadata a:hover {
+    color: rgb(33, 33, 33);
+    text-decoration: none;
+  }
+  .article-svg {
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+  }
+  
+  /* Accounts and Cards */
+  .account-img {
+    height: 125px;
+    width: 125px;
+    margin-right: 20px;
+    margin-bottom: 16px;
+  }
+  .account-heading, .card-heading {
+    font-size: 1rem;
+  }
+  
+  /* thumbs_up */
+  .favorite-section {
+    display: flex;
+    align-items: center;
+  }
+  .favorite-link {
+    margin-right: 5px;
+  }
+  
+  /* Social Network and Headers */
+  .social-network-heading {
+    color: rgb(43, 41, 41);
+    font-size: 25px;
+  }
+  .header-elements {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  /* Home Page and Gallery */
+  .friend-image {
+    max-width: 80%;
+  }
+  .img-thumbnail {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+  }
+  .gallery-card {
+    height: 300px;
+  }
+  
+  /* Friend List and Search Bar */
+  .friend-list-col, .search-bar-col {
+    min-width: 300px;
+  }
+  .search-result-card {
+    margin-top: 20px;
+  }
+  .add-friend-button {
+    margin-left: 10px;
+  }
+  .already-friend-message {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-left: 10px;
+    color: rgb(1, 115, 1);
+  }
+  .already-friend-small-text {
+    font-size: 1.2rem;
+    margin-right: 10px;
+  }
+  .add-friend-button {
+    margin-left: auto;
+    margin-right: 2px;
+  }
+  
+  .custom-card img {
+    max-width: 100%; 
+    height: auto; 
+  }
+  /* Chat Search Results Page */
+  .chat-search-results-page {
+    margin-top: 1rem;
+  }
+  
+  /* Login/Register Page */
+  body {
+    background-color: #ffffff;
+  }
+  .custom-image {
+    max-width: 100%;
+    height: auto;
+  }
+  .login-form {
+    margin-top: 20px;
+  }
+  
+  
+  

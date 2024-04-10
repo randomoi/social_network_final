@@ -1,0 +1,57 @@
+{% extends "social/base.html" %}  
+{% load crispy_forms_tags %}      
+{% load static %}    
+
+{% block content %}    
+<!-- {# START - code was developed with the help of documentation and other external research, please see referenced links.#}             -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <!-- Column for the image -->
+        <div class="col-md-4"> 
+            <!-- include an image from  static files  -->
+            <img src="{% static 'social/images/main_front_image.jpg' %}" alt="Your Image" class="img-fluid custom-image">
+        </div>
+        <!-- column for login form -->
+        <div class="col-md-6 login-form"> 
+            <div class="content-section">
+                <!-- POST used to submit login data -->
+                <form method="POST">      
+                    <!-- CSRF token for security -->        
+                    {% csrf_token %}               
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4">Log In</legend>
+                        <!-- displaying form using crispy forms -->
+                        {{ form|crispy }}          
+                    </fieldset>
+                    <div class="form-group">
+                        <button class="btn btn-outline-info" type="submit">Login</button>
+                    </div>
+                </form>
+                <div class="border-top pt-3">
+                    <small class="text-muted">
+                        Do you need an account? <a class="ml-2" href="{% url 'register' %}">Register</a> 
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}            
+
+<!-- References:
+https://docs.djangoproject.com/en/3.2/topics/templates/#template-inheritance
+https://django-crispy-forms.readthedocs.io/en/latest/
+https://docs.djangoproject.com/en/3.2/howto/static-files/
+https://docs.djangoproject.com/en/3.2/topics/templates/#template-inheritance
+https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#attr-method
+https://docs.djangoproject.com/en/3.2/ref/csrf/
+https://docs.djangoproject.com/en/3.2/ref/templates/builtins/#url
+https://getbootstrap.com/docs/4.0/layout/grid/
+https://stackoverflow.com/questions/72679289/how-to-fit-three-photos-col-4-each-beneath-one-image-with-a-col-12
+https://stackoverflow.com/questions/20953752/centering-images-inside-bootstrap-gridsystem
+https://www.shecodes.io/athena/22572-how-to-adjust-images-with-different-sizes-to-the-same-size-using-bootstrap
+https://bootstrapdocs.com/v3.0.3/docs/css/
+-->
+
+<!-- {# END - code was developed with the help of documentation and other external research, please see referenced links.#}   -->

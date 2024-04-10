@@ -1,0 +1,58 @@
+Using selector: KqueueSelector
+Using selector: KqueueSelector
+Watching for file changes with StatReloader
+HTTP/2 support enabled
+Configuring endpoint tcp:port=8000:interface=127.0.0.1
+Listening on TCP address 127.0.0.1:8000
+HTTP b'GET' request for ['127.0.0.1', 51274]
+process_request
+Created new request model with pk dd8cd38c-d770-4bf2-bd4f-3d90ed26580f
+Using selector: KqueueSelector
+Process response
+Creating response model for request model with pk dd8cd38c-d770-4bf2-bd4f-3d90ed26580f
+Process response done.
+HTTP 302 response started for ['127.0.0.1', 51274]
+HTTP close for ['127.0.0.1', 51274]
+HTTP response complete for ['127.0.0.1', 51274]
+[32mHTTP GET / 302 [0.04, 127.0.0.1:51274][0m
+HTTP b'GET' request for ['127.0.0.1', 51274]
+process_request
+Created new request model with pk 64d14470-80d6-4f38-865e-2bd9c89b6aa4
+Using selector: KqueueSelector
+Process response
+Creating response model for request model with pk 64d14470-80d6-4f38-865e-2bd9c89b6aa4
+Process response done.
+HTTP 200 response started for ['127.0.0.1', 51274]
+HTTP close for ['127.0.0.1', 51274]
+HTTP response complete for ['127.0.0.1', 51274]
+[mHTTP GET /login/ 200 [0.04, 127.0.0.1:51274][0m
+HTTP b'GET' request for ['127.0.0.1', 51274]
+HTTP b'GET' request for ['127.0.0.1', 51275]
+HTTP 200 response started for ['127.0.0.1', 51274]
+HTTP response chunk for ['127.0.0.1', 51274]
+HTTP close for ['127.0.0.1', 51274]
+HTTP response complete for ['127.0.0.1', 51274]
+[mHTTP GET /static/social/css/main.css 200 [0.01, 127.0.0.1:51274][0m
+HTTP b'GET' request for ['127.0.0.1', 51274]
+HTTP 200 response started for ['127.0.0.1', 51275]
+HTTP response chunk for ['127.0.0.1', 51275]
+HTTP response chunk for ['127.0.0.1', 51275]
+HTTP close for ['127.0.0.1', 51275]
+HTTP response complete for ['127.0.0.1', 51275]
+[mHTTP GET /static/social/images/main_front_image.jpg 200 [0.01, 127.0.0.1:51275][0m
+HTTP 200 response started for ['127.0.0.1', 51274]
+HTTP response chunk for ['127.0.0.1', 51274]
+HTTP close for ['127.0.0.1', 51274]
+HTTP response complete for ['127.0.0.1', 51274]
+[mHTTP GET /static/social/js/base.js 200 [0.01, 127.0.0.1:51274][0m
+HTTP b'GET' request for ['127.0.0.1', 51274]
+process_request
+Created new request model with pk aa4e38b0-2ae2-40f3-b1d2-fe53af0322d4
+Using selector: KqueueSelector
+Process response
+Creating response model for request model with pk aa4e38b0-2ae2-40f3-b1d2-fe53af0322d4
+Process response done.
+HTTP 200 response started for ['127.0.0.1', 51274]
+HTTP close for ['127.0.0.1', 51274]
+HTTP response complete for ['127.0.0.1', 51274]
+[mHTTP GET /login/ 200 [0.02, 127.0.0.1:51274][0m

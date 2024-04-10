@@ -1,0 +1,133 @@
+{% load static %} 
+
+{% load count_tags %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- START - code was developed with the help of documentation and other external research, please see referenced links. -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="#"> 
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Main CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'social/css/main.css' %}"> 
+
+</head>
+<body>
+<div>
+<header class="site-header mb-5">
+    <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top my-navbar"> 
+
+        <div class="header-elements mr-auto">
+            <a class="nav-item nav-link ml-2" href="{% url 'social-home' %}" data-toggle="tooltip" data-placement="bottom" title="Home">
+                <h2 class="ml-2 social-network-heading">Social Network</h2>
+            </a>
+
+            <!-- if authenticated, display all navigation icons/links -->
+            {% if user.is_authenticated %}
+                <form class="d-flex" method="POST" action="{% url 'profile-search' %}">
+                    {% csrf_token %}
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched_term">
+                    <button class="btn btn-secondary" type="submit" data-toggle="tooltip" data-placement="bottom" title="Search">
+                        <img src="{% static 'social/images/search_icon.png' %}" alt="Logo" width="50" height="50" class="d-inline-block align-top">
+                    </button>
+                </form>
+                <a class="nav-item nav-link" href="{% url 'social-home' %}" data-toggle="tooltip" data-placement="bottom" title="Home">
+                    <img src="{% static 'social/images/home_icon.png' %}" alt="Logo" width="50" height="50" class="d-inline-block align-top">
+                </a>
+                <a class="nav-item nav-link" href="{% url 'profile' %}" data-toggle="tooltip" data-placement="bottom" title="Update Profile">
+                    <!-- display profile current user image if they add it, otherwise display default image-->
+                    <!-- if user visits friend's page, this will remain to be their image -->
+                    {% if request.user.is_authenticated %}
+                        {% if request.user.profile.image %}
+                            <img src="{{ request.user.profile.image.url }}" alt="User Profile" width="50" height="50" class="d-inline-block align-top rounded-circle">
+                        {% else %}
+                            <img src="{% static 'social/images/default.jpg' %}" alt="User Profile" width="50" height="50" class="d-inline-block align-top rounded-circle">
+                        {% endif %}
+                {% endif %}
+                </a>
+                  
+                <a class="nav-item nav-link" href="{% url 'logout' %}" data-toggle="tooltip" data-placement="bottom" title="Logout">
+                    <img src="{% static 'social/images/padlock_icon.png' %}" alt="Logo" width="50" height="50" class="d-inline-block align-top">
+                </a>
+
+            <!-- if not authenticated, display llogin and register links only -->
+            {% else %}
+                <a class="nav-item nav-link text-dark" href="{% url 'login' %}">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                <a class="nav-item nav-link text-dark" href="{% url 'register' %}">
+                    <i class="fas fa-user-plus"></i> Register
+                </a>
+            {% endif %}
+            <!-- dropdown menu for admin links -->
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="adminDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Admin
+                </button>
+            
+                <div class="dropdown-menu" aria-labelledby="adminDropdown">
+                    <a class="dropdown-item" href="{% url 'admin:index' %}">Django Admin</a>
+                    <a class="dropdown-item" href="{% url 'admin-swagger-ui' %}">Swagger</a>
+                    <a class="dropdown-item" href="{% url 'admin-redoc-ui' %}">ReDoc</a>
+                    <a class="dropdown-item" href="{% url 'silk:requests' %}">Silk</a>
+                    <a class="dropdown-item" href="{% url 'user-list' %}">User API</a>
+                    <a class="dropdown-item" href="{% url 'profile-list' %}">Profile API</a>
+                    <a class="dropdown-item" href="{% url 'posts-api' %}">Posts API - All Posts</a>
+                    <!-- displays one post by user for demonstration purposes-->
+                    {% for post in posts %}
+                        {% if post.author == request.user %}
+                            <a class="dropdown-item" href="{% url 'post-detail-api' post.id %}">Post # {{ post.id }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+</div>
+<!-- alerts for not admin users when they try to access Swagger and ReDoc-->
+<div class="col-md-9 mt-5">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% if 'error_for_swagger' in message.tags or 'error_for_redoc' in message.tags %}
+                <script>
+                    alert("You do not have authorization to view this page.");
+                </script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% block content %}{% endblock %}
+</div>
+
+<!-- scripts: bootstrap, ajax, jquery, js -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="{% static 'social/js/base.js' %}"></script> 
+
+</body>
+</html>
+
+<!-- References:
+https://getbootstrap.com/docs/4.1/components/navbar/ 
+https://www.w3schools.com/bootstrap4/bootstrap_navbar.asp
+https://mdbootstrap.com/docs/standard/navigation/navbar/
+https://flowbite.com/docs/components/navbar/
+https://getbootstrap.com/docs/4.0/components/alerts/
+https://stackoverflow.com/questions/69198459/django-div-class-alert-alert-danger-does-not-work-properly
+https://testdriven.io/tips/9329fe4a-605d-4c73-b254-d79542925b81/
+
+END - code was developed with the help of documentation and other external research, please see referenced links.
+-->
