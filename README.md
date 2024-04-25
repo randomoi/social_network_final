@@ -17,6 +17,8 @@
 ### Project Overview
 This social network is the ultimate social hub where pets take the lead! Imagine a whimsical world where your furry friends curate their profiles, make pawsome connections, and share their daily escapades. From the fluffiest kitties to the bounciest bunnies, pets of all types come together to sniff out new pals, schedule playdates, and post the cutest of their nine lives. Whether it's a sunbathing iguana or a parkour-loving pup, this social network is where they all bark, meow, and chirp about it. Dive into this furry fiesta where pets aren’t just man’s best friend—they're each other's too!
 
+[![Project Video](https://img.youtube.com/vi/5sjwoHbds9A/0.jpg)](https://www.youtube.com/watch?v=5sjwoHbds9A)
+
 #### Links
 
 AWS EC2 Deployed Project:
